@@ -1,0 +1,155 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html class="x-admin-sm">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.2</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="stylesheet" href="{% static 'moniter/css/font.css' %}">
+    <link rel="stylesheet" href="{% static 'moniter/css/xadmin.css' %}">
+    <script type="text/javascript" src="{% static 'moniter/lib/layui/layui.js' %}" charset="utf-8"></script>
+    <script type="text/javascript" src="{% static 'moniter/js/xadmin.js' %}"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+            <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+            <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+</head>
+
+<body>
+<div class="layui-fluid">
+    <div class="layui-row">
+        <form class="layui-form" action="{% url 'edit_action' %}" method="post">
+        {% csrf_token %}
+            <input type="hidden" name="spider_id" value="{{ data.spider_id }}">
+            <div class="layui-form-item">
+                <label for="L_email" class="layui-form-label">
+                    <span class="x-red">*</span><nobr>更新频率</nobr>
+                </label>
+                <div class="layui-input-inline">
+                    <input required="" lay-verify="email" autocomplete="off" name="interval_time"
+                           class="layui-input" value="{{ data.interval_time }}"></div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">*</span>更新频率(以分为单位)
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_username" class="layui-form-label">
+                    <span class="x-red">*</span><nobr>入库表名</nobr>
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_username" name="data_base" required="" lay-verify="nikename"
+                           autocomplete="off" class="layui-input" value="{{ data.data_base }}"></div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">*</span>入库位置
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label for="L_pass" class="layui-form-label">
+                    <span class="x-red">*</span><nobr>分布机器</nobr>
+                </label>
+                <div class="layui-input-inline">
+                    <input type="type" id="L_pass" name="server" required="" lay-verify="pass" autocomplete="off"
+                           class="layui-input" value="{{ data.server }}"></div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">*</span>选择使用的机器
+                </div>
+                <!-- Split button -->
+                <div class="btn-group">
+                    <button type="button" class="btn btn-danger" id="L_pass">选择</button>
+                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        {% for server in data.servers %}
+                            <li><a onclick="edit_server('{{ server }}')">{{ server }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <label for="L_repass" class="layui-form-label"></label>
+                <button class="layui-btn" lay-filter="add" lay-submit="" type="submit">提交</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    function edit_server(new_value) {
+        var data = new_value;
+        document.getElementById('L_pass').value = data;
+        {#$('#L_pass').textbox(new_value,old_value);#}
+    }
+</script>
+<script>layui.use(['form', 'layer'],
+    function () {
+        $ = layui.jquery;
+        var form = layui.form,
+            layer = layui.layer;
+
+        //自定义验证规则
+        form.verify({
+            email: function (value) {
+                if (typeof (value) != "string") {
+                    return '参数必须为数字';
+                }
+            },
+            nikename: function (value) {
+                if (value.length < 1) {
+                    return '昵称至少得5个字符啊';
+                }
+            },
+            {#pass: [/(.+){6,12}$/, '密码必须6到12位'],#}
+            repass: function (value) {
+                {#if ($('#L_pass').val() != $('#L_repass').val()) {#}
+                if (value.length < 1) {
+                    return '两次密码不一致';}
+            }
+        });
+
+        //监听提交
+        form.on('submit(add)',
+            function (data) {
+                {#console.log(data);#}
+                //发异步，把数据提交给php
+                layer.alert("修改成功", {
+                        icon: 6
+                    },
+                    function () {
+                        // 获得frame索引
+                        var index = parent.layer.getFrameIndex(window.name);
+                        //关闭当前frame
+                        parent.layer.close(index);
+                    });
+                return false;
+            });
+
+    });</script>
+<script>var _hmt = _hmt || [];
+(function () {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();</script>
+</body>
+
+</html>
