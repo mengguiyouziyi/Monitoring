@@ -10,9 +10,8 @@ class data_count(models.Model):
     wednesday = models.IntegerField(default=0)
     thursday = models.IntegerField(default=0)
     friday = models.IntegerField(default=0)
-    saturday = models.IntegerField(default=0)
-    sunday = models.IntegerField(default=0)
-    last_week = models.IntegerField(default=0)
+    database_name = models.CharField(max_length=255)
+
 
 
 class app_num(models.Model):

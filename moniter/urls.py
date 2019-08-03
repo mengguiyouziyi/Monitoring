@@ -5,6 +5,7 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^welcome', views.welcome),
     url(r'^first_welcome', views.welcome_first, name='first_welcome'),
+    url(r'^edit_selectbase', views.edit_selectbase, name='edit_selectbase'),
     url(r'^order', views.order),
     url(r'^cate', views.cate),
     url(r'^member', views.member, name='member'),

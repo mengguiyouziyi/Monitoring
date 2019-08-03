@@ -21,17 +21,11 @@ def welcome_first(request):
     new_num['tuesday'] = num.tuesday-num.monday
     new_num['wednesday'] = num.wednesday-num.tuesday
     new_num['thursday'] = num.thursday-num.wednesday
-    new_num['friday'] = num.friday-num.thursday
-    new_num['saturday'] = num.saturday-num.friday
-    new_num['sunday'] = num.sunday-num.saturday
     def getYesterday(num):
         today = datetime.date.today()
         twoday = datetime.timedelta(days=num)
         yesterday = today - twoday
         return str(yesterday)
-    new_num['one_day'] = getYesterday(6)
-    new_num['two_day'] = getYesterday(5)
-    new_num['three_day'] = getYesterday(4)
     new_num['four_day'] = getYesterday(3)
     new_num['five_day'] = getYesterday(2)
     new_num['six_day'] = getYesterday(1)
@@ -43,11 +37,52 @@ def welcome_first(request):
         'data_base1',
         'data_base2',
         'data_base3',
-        'data_base4',
-        'moniter_data_count',
+        'qaz',
+        'moniter_app_num',
     ]
 
     return render(request, 'moniter/welcome1.html', {'new_num': new_num, 'data_base': data_base})
+
+def edit_selectbase(request):
+    new_num = {}
+    num = models.data_count.objects.get(pk=1)
+    new_num['monday'] = num.monday
+    new_num['tuesday'] = num.tuesday - num.monday
+    new_num['wednesday'] = num.wednesday - num.tuesday
+    new_num['thursday'] = num.thursday - num.wednesday
+
+    def getYesterday(num):
+        today = datetime.date.today()
+        twoday = datetime.timedelta(days=num)
+        yesterday = today - twoday
+        return str(yesterday)
+
+    new_num['four_day'] = getYesterday(3)
+    new_num['five_day'] = getYesterday(2)
+    new_num['six_day'] = getYesterday(1)
+    new_num['now'] = getYesterday(0)
+
+    data_base = {}
+
+    data_base['data_base'] = [
+        'data_base1',
+        'data_base2',
+        'data_base3',
+        'qaz',
+        'moniter_app_num',
+    ]
+
+    database_name = request.POST.get('data_base')
+    print(database_name)
+    data = models.data_count.objects.filter(database_name=database_name)[0]
+    print(data.monday, data.tuesday, data.wednesday, data.thursday)
+    new_num['monday'] = data.monday
+    new_num['tuesday'] = data.tuesday - data.monday
+    new_num['wednesday'] = data.wednesday - data.tuesday
+    new_num['thursday'] = data.thursday - data.wednesday
+
+    return render(request, 'moniter/welcome1.html', {'new_num': new_num, 'data_base': data_base, 'database_name': database_name})
+
 
 
 def order(request):
