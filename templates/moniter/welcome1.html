@@ -35,24 +35,29 @@
 
         <div class="layui-col-sm12 layui-col-md6">
             <div class="layui-card">
-                <div class="layui-card-header">
-                    <input type="text" id="database" name="databse_name" value="{{ database_name }}">最近四天新增数据
-                    <!-- Split button -->
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-danger" id="L_pass">选择</button>
-                        <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
-                            <span class="caret"></span>
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a  onclick="edit_database('{{ database_name }}')">{{ database_name }}</a></li>
-                        </ul>
+                <div class="layui-card-header" style="float: left">最近四天新增数据</div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <input type="text" id="database" class="form-control" aria-label="...">
+                            <div class="input-group-btn">
+                                <button type="submit" class="btn btn-default btn btn-danger layui-icon" >&#xe615; 确认</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">选择表 <span class="caret"></span>
+                                        <span class="sr-only"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    {% for database in data_base.data_base %}
+                                        <li><a onclick="edit_database('{{ database }}')">{{ database }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div><!-- /btn-group -->
+                        </div><!-- /input-group -->
                     </div>
                 </div>
+
                 <div class="layui-card-body" style="min-height: 280px;">
                     <div id="main1" class="layui-col-sm12" style="height: 300px;"></div>
-
                 </div>
             </div>
         </div>

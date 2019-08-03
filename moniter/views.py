@@ -40,14 +40,14 @@ def welcome_first(request):
     data_base = {}
 
     data_base['data_base'] = [
-        'data_base1'
-        'data_base2'
-        'data_base3'
-        'data_base4'
-        'data_base5'
+        'data_base1',
+        'data_base2',
+        'data_base3',
+        'data_base4',
+        'moniter_data_count',
     ]
 
-    return render(request, 'moniter/welcome1.html', {'new_num': new_num, 'data_base':data_base})
+    return render(request, 'moniter/welcome1.html', {'new_num': new_num, 'data_base': data_base})
 
 
 def order(request):
