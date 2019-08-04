@@ -13,7 +13,6 @@ class data_count(models.Model):
     database_name = models.CharField(max_length=255)
 
 
-
 class app_num(models.Model):
     rank = models.CharField(max_length=255, null=True)
     appname = models.CharField(max_length=255, null=True)
